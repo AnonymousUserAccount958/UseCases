@@ -2,7 +2,7 @@
 
 A video showcasing the described use case is available on YouTube:
 
-[![IMAGE ALT TEXT HERE](TODO)
+[![IMAGE ALT TEXT HERE](https://i9.ytimg.com/vi_webp/e8lc02yDPCY/maxresdefault.webp?v=69596aee&sqp=CIza5coG&rs=AOn4CLDROINV2n-ptujJW7FUJtBr4J5R6Q)](https://youtu.be/e8lc02yDPCY)
 
 ## Data Type Nodes
 
