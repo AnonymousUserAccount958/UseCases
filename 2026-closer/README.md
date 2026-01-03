@@ -248,7 +248,7 @@ The result includes the objective function value. In this example, the value is:
 ```
 5
 ```
-
+![Final Result](docs/graphics/Bild13.png)
 ---
 
 
