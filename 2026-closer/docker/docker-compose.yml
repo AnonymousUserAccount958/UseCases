@@ -251,6 +251,13 @@ services:
     ports:
       - "5435:5432"
 
+  low-code-modeler:
+    image: ghcr.io/leqo-framework/low-code-modeler:sha-91d3316
+    container_name: low-code-modeler
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+
 
 
   pattern-atlas-api:
