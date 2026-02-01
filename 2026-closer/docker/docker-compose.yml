@@ -256,7 +256,7 @@ services:
     container_name: low-code-modeler
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "4242:4242"
 
 
 
