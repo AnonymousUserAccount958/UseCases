@@ -1,29 +1,30 @@
-# Quantics  2026
+# Quantics 2026
 
+This repository accompanies the Quantics 2026 paper and provides a research prototype of the **Multi-Domain Quantum Low-Code Modeler** together with a complete execution environment for domain-specific quantum low-code models.
 
----
-
-## Setup
-
-This guide explains how to deploy the Quantum Low-Code Modeler using Docker and run a QAOA-based workflow.
-
-All required components are provided as Docker containers and started using the supplied `docker-compose` file.
+The artifact demonstrates how domain experts can model optimization problems (e.g., finance) using high-level abstractions and execute the resulting hybrid quantum-classical workflows based on QAOA.
 
 ---
 
-## 1. Prepare the Environment
+## Overview
 
-Open the `docker` directory and update the `.env` file:
+The system consists of the following components:
 
-```
-PUBLIC_HOSTNAME=<your-public-ip>
-```
+- **Quantum Low-Code Modeler**  
+  A web-based graphical modeling environment that enables users to construct quantum applications using domain-specific abstractions rather than low-level quantum circuits. It provides visual elements (domain blocks) representing tasks, constraints, and data, allowing domain experts to specify problems at a high level of abstraction.
 
-Important: Use a publicly reachable IP address. Do not use `localhost`.
+- **Backend Transformation Service**  
+  A service that automatically transforms them into executable quantum workflows.
+
+- **Agent Context Components**  
+  Supporting modules that provide runtime information required for adaptive workflow execution. These components maintain metadata, constraints, and available algorithmic options, enabling an agent to dynamically select suitable implementations during execution while ensuring semantic validity.
+
+- **Camunda Components**  
+  The workflow execution environment based on the Camunda platform. It executes the generated BPMN workflows, coordinates interactions between classical services and quantum tasks, manages process state, and provides monitoring tools such as Tasklist and Cockpit for user interaction and result inspection.
 
 ---
 
-## 2. Start the Components
+## 1. Start the Components
 
 Run the following commands from the `docker` directory:
 
@@ -36,103 +37,56 @@ Wait until all containers are running. This may take several minutes.
 
 ---
 
-## 3. Open the Modeler
+## 2. Start Ollama
 
-Open the following URL:
+Camunda currently only supports OpenAI Ollama models and Amazon Bedrock.
+Since the execution with Amazon Bedrock can become quite expensive, we advice to use Ollama with the OpenAI model (gpt-oss:20b) if you have enough RAM (32 GB should be enough).
 
-http://localhost:4242
+
+## 3. Open the Quantum Low-Code Modeler
+
+Open the Quantum Low-Code Modeler at http://localhost:4242.
 
 You should see the Modeler start screen:
 
 ![Modeler Initial](docs/graphics/Bild1.png)
 
-The Modeler is pre-configured with:
-
-- endpoints for the low-code backend  
-- OpenTOSCA ecosystem workflow  
-- QRM repository  
-
-Open the Configuration menu in the toolbar and enter your OpenAI token.
+Import the ![finance domain profile](profiles/financeProfile.json).
 
 ---
 
-## 4. Select an Algorithm
+## 4. Import the Model
 
-Open the Algorithm Selection view:
+Integrate the ![model](models/financeModel.json).
 
-![Algorithm Selection](docs/graphics/Bild2.png)
+After loading, the model should resemble the example shown below.
 
-Read the information provided:
-
-![Notes](docs/graphics/Bild3.png)
-
-Enter the following problem description:
-
-```
-I have five locations connected by roads. I want to split the locations into two groups so that as many roads as possible go between the groups.
-```
-
-![Problem Input](docs/graphics/Bild4.png)
-
-Continue to the next step.
 
 ---
 
-## 5. Inspect the Pattern Graph
+## 5. Transform the Model
 
-Click on "Pattern Graph":
-
-![Pattern Graph](docs/graphics/Bild5.png)
-
-Scroll to review the listed components and information, then return using the Back button.
-
----
-
-## 6. Select the Template
-
-Click on "Select Template":
-
-![Select Template](docs/graphics/Bild6.png)
-
-Select the QAOA template.
-
-This template is also available as `docs/model.json`.
-
-![Template](docs/graphics/Bild7.png)
-
----
-
-## 7. Transform the Model
-
-Click on "Transform Model":
-
+Click "Send to Backend" to transform the domain model into an executable workflow.
 ![Transform](docs/graphics/Bild8.png)
 
-A validation warning may appear:
+---
 
-![Warning](docs/graphics/Bild9.png)
+## 6. Camunda Deployment
 
-This warning is expected. QAOA automatically adapts to the number of nodes, and the backend configures measurement of all qubits, so no manual specification is required.
+Open the Camunda Modeler (installed locally).
+
+Import all files from the generated workflow folder.
+This folder contains:
+
+- BPMN workflow
+- Agent context file
+- Agent feedback loop file
+
+Deploy the workflow to the Camunda engine.
 
 ---
 
-## 8. Select and Deploy the Workflow
-
-Select a workflow:
-
-![Workflow](docs/graphics/Bild10.png)
-
-Go to History. The top entry is the most recent transformation.
-
-Click on Deploy:
-
-![Deploy](docs/graphics/Bild11.png)
-
-Deployment may take some time.
-
----
-
-## 9. Execute the Workflow in Camunda
+## 7. Execute the Workflow in Camunda
 
 Open:
 
@@ -153,14 +107,13 @@ Click Run.
 
 ---
 
-## 10. View the Result
+## 8. View the Result
 
 Open the Camunda Cockpit.
 
 The result includes the objective function value. In this example, the value is:
 
 ```
-5
 ```
 ![Final Result](docs/graphics/Bild13.png)
 ---
