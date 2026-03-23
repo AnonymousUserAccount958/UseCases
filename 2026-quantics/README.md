@@ -26,7 +26,7 @@ The system consists of the following components:
 
 ## 1. Start the Components
 
-Run the following commands from the `docker` directory:
+Run the following commands from the `docker` directory to start Camunda:
 
 ```
 docker-compose pull
@@ -37,61 +37,86 @@ Wait until all containers are running. This may take several minutes.
 
 ---
 
-## 2. Start Ollama
+## 2. Start the Quantum Low-Code Modeler
+
+Run the following commands to start the Quantum Low-Code Modeler:
+
+```
+git clone https://github.com/AnonymousUserAccount958/low-code-modeler.git
+npm run dev
+```
+---
+
+## 3. Start the Quantum Low-Code Backend
+
+Run the following commands to start the Quantum Low-Code Backend:
+
+```
+git clone https://github.com/AnonymousUserAccount958/leqo-backend.git
+npm run dev
+```
+
+---
+
+
+## 4. Start Ollama
 
 Camunda currently only supports OpenAI Ollama models and Amazon Bedrock.
 Since the execution with Amazon Bedrock can become quite expensive, we advice to use Ollama with the OpenAI model (gpt-oss:20b) if you have enough RAM (32 GB should be enough).
 
+---
 
-## 3. Open the Quantum Low-Code Modeler
+## 5. Open the Quantum Low-Code Modeler
 
 Open the Quantum Low-Code Modeler at http://localhost:4242.
 
 You should see the Modeler start screen:
 
-![Modeler Initial](docs/graphics/Bild1.png)
-
-Import the ![finance domain profile](profiles/financeProfile.json).
+![Modeler Initial](docs/graphics/0_ModelerOverview.png)
 
 ---
 
-## 4. Import the Model
+## 6. Import the Domain Profile
 
-Integrate the ![model](models/financeModel.json).
+Click on "Manage Domain Profiles" inside the Quantum Low-Code Modeler as depicted here:
+
+![Manage Domain Profiles](docs/graphics/1_ManageDomainProfileButton.png)
+
+Then click on "Import Domain Profile", select the ![finance domain profile](profiles/financeProfile.json) and click on "save":
+![Import Domain Profile](docs/graphics/3_DomainProfileImportSuccess.png)
+
+---
+
+
+## 7. Select the Domain Profile and import the Model
+
+Select the finance profile inside the Experience Mode and import the ![model](models/financeModel.json).
+![Import Domain Profile](docs/graphics/4_SelectDomainProfile.png)
 
 After loading, the model should resemble the example shown below.
-
+![Import Model](docs/graphics/5_ModelImport.png)
 
 ---
 
-## 5. Transform the Model
+## 8. Transform the Model
 
 Click "Send to Backend" to transform the domain model into an executable workflow.
-![Transform](docs/graphics/Bild8.png)
+![Transform](docs/graphics/6_Transformation.png)
 
 ---
 
-## 6. Camunda Deployment
+## 9. Transform the Model
 
-Open the Camunda Modeler (installed locally).
+Click "History" and download the result file.
+![Download Result](docs/graphics/7_WorkflowDownload.png)
 
-Import all files from the generated workflow folder.
-This folder contains:
-
-- BPMN workflow
-- Agent context file
-- Agent feedback loop file
-
-Deploy the workflow to the Camunda engine.
+Alternatively, the files can be found in the workflow directory.
 
 ---
 
-## 7. Execute the Workflow in Camunda
+## 10. Camunda Upload
 
-Open:
-
-http://localhost:8090
-
+Open the Camunda Modeler at http://localhost:8070.
 Log in using the following credentials:
 
 ```
@@ -99,23 +124,35 @@ user: demo
 password: demo
 ```
 
-Open the Tasklist, select the process, and enter your IP address:
 
-![Task Run](docs/graphics/Bild12.png)
+Create a project and upload all files from the ![workflow](workflows/) folder.
+This folder contains:
 
-Click Run.
+- BPMN workflow
+- Agent context file
+- Agent feedback loop file
+
+![Upload Files](docs/graphics/9_CamundaSuccessUpload.png)
 
 ---
 
-## 8. View the Result
+## 11. Execute the Workflow in Camunda
+
+Click on the workflow and click on play.
+![Upload Files](docs/graphics/10_CamundaAgentPrompt.png)
+
+---
+
+## 12. View the Result
 
 Open the Camunda Cockpit.
 
-The result includes the objective function value. In this example, the value is:
+The result includes the asset selection for the four assets and a budget of 2.
+Here, QAOA was chosen by the agent and the algorithm finds the following asset selection
 
 ```
 ```
-![Final Result](docs/graphics/Bild13.png)
+![Final Result](docs/graphics/11_CamundaResult.png)
 ---
 
 
